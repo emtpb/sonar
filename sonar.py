@@ -14,12 +14,12 @@ class Shallows:
 
         if scenario is '2020':
             water = fd.AcousticMaterial(1500, 1000, 1e-3, 3e-3)
-            self.field = fd.Acoustic2D(t_delta=2e-5, t_samples=2400,
-                                       x_delta=1e-1, x_samples=1000,
-                                       y_delta=1e-1, y_samples=200,
+            self.field = fd.Acoustic2D(t_delta=2e-5, t_samples=2000,
+                                       x_delta=0.5e-1, x_samples=1600,
+                                       y_delta=0.5e-1, y_samples=400,
                                        material=water)
             self.ping_pre_delay = 1e-3
-            self.ping_frequency = 1e3
+            self.ping_frequency = 2e3
             self.ping_bandwidth = 2
 
             submarine_boundary = [
