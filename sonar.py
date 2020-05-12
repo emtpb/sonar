@@ -71,7 +71,8 @@ class Shallows:
                               max(self.field.y.vector))))
 
         if show:
-            animator = fd.Animator2D(field=self.field, scale=0.1)
+            animator = fd.Animator2D(field=self.field, scale=0.2)
+            animator.show_boundaries = False
             animator.start_simulation()
         else:
             self.field.simulate()
