@@ -22,6 +22,23 @@ class Shallows:
             self.ping_frequency = 1e3
             self.ping_bandwidth = 2
 
+            submarine_boundary = [
+                self.field.get_line_region((40, 6, 45, 6)),
+                self.field.get_line_region((45, 6, 46, 5)),
+                self.field.get_line_region((46, 5, 46, 4)),
+                self.field.get_line_region((46, 4, 45, 3)),
+                self.field.get_line_region((45, 3, 40, 3)),
+                self.field.get_line_region((40, 3, 38, 4)),
+                self.field.get_line_region((38, 4, 38, 5)),
+                self.field.get_line_region((38, 5, 40, 6)),
+                self.field.get_line_region((42, 6, 42, 8)),
+                self.field.get_line_region((42, 8, 44, 8)),
+                self.field.get_line_region((44, 8, 42, 6)),
+            ]
+
+            for boundary in submarine_boundary:
+                self.field.pressure.add_boundary(boundary)
+
         self.field.x.snap_radius = 1e-3
         self.field.y.snap_radius = 1e-3
 
