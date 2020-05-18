@@ -15,8 +15,9 @@ We recommend using `Anaconda <https://www.anaconda.com/>`_.
 The field simulations are implemented using the Python package *pyfds*, which can be installed
 using *pip* (comes with Anaconda) by the following command:
 
-    pip install pyfds
+.. code-block:: bash
 
+    pip install pyfds
 
 Usage
 =====
