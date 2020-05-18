@@ -5,7 +5,7 @@ import scipy.signal as sg
 
 class Shallows:
 
-    def __init__(self, scenario):
+    def __init__(self, scenario: str):
         """Create a shallows scenario.
 
         Args:
@@ -38,6 +38,9 @@ class Shallows:
 
             for boundary in submarine_boundary:
                 self.field.pressure.add_boundary(boundary)
+
+        else:
+            raise RuntimeError('Unknown scenario {}'.format(scenario))
 
         self.field.x.snap_radius = 1e-3
         self.field.y.snap_radius = 1e-3
