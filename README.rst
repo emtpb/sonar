@@ -10,10 +10,10 @@ Installation
 
 As the environment consists of a single Python class, no installation of sonar is required.
 Placing *sonar.py* in the working directory should suffice.
-A python interpreter is, however, required.
+A Python interpreter is, however, required.
 We recommend using `Anaconda <https://www.anaconda.com/>`_.
-The field simulations to generate the signals are using the Python package *pyfds*, which can be
-installed using *pip* (comes with Anaconda) by the following command:
+The field simulations are implemented using the Python package *pyfds*, which can be installed
+using *pip* (comes with Anaconda) by the following command:
 
     pip install pyfds
 
@@ -36,7 +36,7 @@ Here is a minimal working example (to be placed in the same directory as *sonar.
             show=True
         )
 
-The first line imports the class :code:`Shallows` from the :code:`sonar` module (the python file
+The first line imports the class :code:`Shallows` from the :code:`sonar` module (the Python file
 *sonar.py*).
 The following statement (placement in :code:`if __name__ == '__main__':`) is necessary for
 the animation of the field simulation to work.
@@ -50,6 +50,6 @@ Also note that all delays should be positive.
 The example sends pings at 0 m (center of the field) and 1 m with the first ping having no delay
 and the second one being delayed by 0.1 ms.
 The display of the field simulation can be disabled by setting :code:`show=False`.
-After the simulation is finished the variable :code:`results` contains a list of echo signals
+After the simulation is finished the variable :code:`result` contains a list of echo signals
 recorded at the positions the pings where send at.
 The transmitted signals are also present in these signals.
