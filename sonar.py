@@ -39,11 +39,11 @@ class Shallows:
             for boundary in submarine_boundary:
                 self.field.pressure.add_boundary(boundary)
 
+            self.field.x.snap_radius = 1e-3
+            self.field.y.snap_radius = 1e-3
+
         else:
             raise RuntimeError('Unknown scenario {}'.format(scenario))
-
-        self.field.x.snap_radius = 1e-3
-        self.field.y.snap_radius = 1e-3
 
     def ping(self, positions, delays=None, show=False):
         """Send delayed pings at the given positions. Positions are relative to the center of
