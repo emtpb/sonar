@@ -12,7 +12,7 @@ class Shallows:
             scenario: Select a scenario.
         """
 
-        if scenario is '2020':
+        if scenario == '2020':
             water = fd.AcousticMaterial(1500, 1000, 1e-3, 3e-3)
             self.field = fd.Acoustic2D(t_delta=2e-5, t_samples=2000,
                                        x_delta=0.5e-1, x_samples=1600,
