@@ -42,6 +42,34 @@ class Shallows:
             self.field.x.snap_radius = 1e-3
             self.field.y.snap_radius = 1e-3
 
+        elif scenario == '2021':
+            water = fd.AcousticMaterial(1500, 1000, 1e-3, 3e-3)
+            stone = fd.AcousticMaterial(1500, 5000)
+            self.field = fd.Acoustic2D(t_delta=1e-7, t_samples=2700,
+                                       x_delta=0.5e-3, x_samples=1600,
+                                       y_delta=0.5e-3, y_samples=400,
+                                       material=water)
+            self.ping_pre_delay = 1e-5
+            self.ping_frequency = 200e3
+            self.ping_bandwidth = 2
+
+            self.field.x.snap_radius = 25e-5
+            self.field.y.snap_radius = 25e-5
+
+            pos_x = 0.3 + np.random.rand() * 0.2
+            pos_y = 0.075 + np.random.rand() * 0.05
+            size = 0.0075
+            self.field.add_material_region(
+                self.field.get_tri_region((pos_x, pos_y - size,
+                                           pos_x + size, pos_y,
+                                           pos_x - size, pos_y)), stone)
+            self.field.add_material_region(
+                self.field.get_tri_region((pos_x, pos_y + size,
+                                           pos_x + size, pos_y,
+                                           pos_x - size, pos_y)), stone)
+            self.field.pressure.add_output(
+                self.field.get_point_region((pos_x, pos_y), name='stone'))
+            
         else:
             raise RuntimeError('Unknown scenario {}'.format(scenario))
 
