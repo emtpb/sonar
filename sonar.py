@@ -11,7 +11,7 @@ class Shallows:
         Args:
             scenario: Select a scenario.
         """
-
+        self.postprocessor = None
         if scenario == '2020':
             water = fd.AcousticMaterial(1500, 1000, 1e-3, 3e-3)
             self.field = fd.Acoustic2D(t_delta=2e-5, t_samples=2000,
@@ -69,6 +69,7 @@ class Shallows:
                                            pos_x - size, pos_y)), stone)
             self.field.pressure.add_output(
                 self.field.get_point_region((pos_x, pos_y), name='stone'))
+            self.postprocessor = lambda output: (output[0], output[1:])
             
         else:
             raise RuntimeError('Unknown scenario {}'.format(scenario))
@@ -108,4 +109,8 @@ class Shallows:
         else:
             self.field.simulate()
 
-        return [output.mean_signal for output in self.field.pressure.outputs]
+        if self.postprocessor:
+            return self.postprocessor(
+                [output.mean_signal for output in self.field.pressure.outputs])
+        else:
+            return [output.mean_signal for output in self.field.pressure.outputs]
