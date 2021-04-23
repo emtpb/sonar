@@ -45,12 +45,28 @@ Next up, an object of the type :code:`Shallows` called :code:`field` is created,
 scenario for 2020.
 The last statement allows you to send a number of pings (acoustic impulses) at given positions
 and with delays.
-Note that not all positions are valid, as the field is spatially quantized with an increment of
-0.05 m.
-Also note that all delays should be positive.
+Note that all delays should be positive.
 The example sends pings at 0 m (center of the field) and 1 m with the first ping having no delay
 and the second one being delayed by 0.1 ms.
 The display of the field simulation can be disabled by setting :code:`show=False`.
-After the simulation is finished the variable :code:`result` contains a list of echo signals
+
+2020 scenario
+-------------
+
+This scenario constitutes a classic echolocation example and can be used to experiment with sonar
+imaging algorithms.
+Note that not all excitation positions are valid, as the field is spatially quantized with an
+increment of 0.05 m.
+After the simulation is finished, the return value of :code:`ping` contains a list of echo signals
 recorded at the positions the pings where send at.
 The transmitted signals are also present in these signals.
+
+2021 scenario
+-------------
+
+This scenario simulates medical ultrasound applications, e.g. lithotripsy.
+A small, high-density object is placed at a randomized position in the field.
+The field is spatially quantized with an increment of 0.5 mm, so excitation positions need to
+adhere to this quantization.
+The return value of :code:`ping` is a tuple that contains the signal at the center of the
+high-density object and a list of echo signals recorded at the positions the pings where send at.
