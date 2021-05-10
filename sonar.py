@@ -86,6 +86,12 @@ class Shallows:
         Returns:
             Returned signals.
         """
+
+        # Reset field to allow for repeated execution.
+        self.field.pressure.values = np.zeros_like(self.field.pressure.values)
+        self.field.velocity_x.values = np.zeros_like(self.field.velocity_x.values)
+        self.field.velocity_y.values = np.zeros_like(self.field.velocity_y.values)
+
         if delays is None:
             delays = np.zeros(len(positions))
 
