@@ -91,6 +91,7 @@ class Shallows:
         self.field.pressure.values = np.zeros_like(self.field.pressure.values)
         self.field.velocity_x.values = np.zeros_like(self.field.velocity_x.values)
         self.field.velocity_y.values = np.zeros_like(self.field.velocity_y.values)
+        self.field.step = 0
 
         if delays is None:
             delays = np.zeros(len(positions))
