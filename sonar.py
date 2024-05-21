@@ -70,16 +70,17 @@ class Shallows:
             self.field.pressure.add_output(
                 self.field.get_point_region((pos_x, pos_y), name='stone'))
             self.postprocessor = lambda output: (output[0], output[1:])
-            
+
         else:
             raise RuntimeError('Unknown scenario {}'.format(scenario))
 
     def ping(self, positions, delays=None, show=False):
-        """Send delayed pings at the given positions. Positions are relative to the center of
-        the field.
+        """Send delayed pings at the given positions. Positions are relative to
+        the centre of the field.
 
         Args:
-            positions: Positions to send and receive pings, relative to the center of the field.
+            positions: Positions to send and receive pings, relative to the
+                centre of the field.
             delays: Delay of the pings.
             show: Animate the simulation.
 
@@ -89,8 +90,10 @@ class Shallows:
 
         # Reset field to allow for repeated execution.
         self.field.pressure.values = np.zeros_like(self.field.pressure.values)
-        self.field.velocity_x.values = np.zeros_like(self.field.velocity_x.values)
-        self.field.velocity_y.values = np.zeros_like(self.field.velocity_y.values)
+        self.field.velocity_x.values = \
+            np.zeros_like(self.field.velocity_x.values)
+        self.field.velocity_y.values = \
+            np.zeros_like(self.field.velocity_y.values)
         self.field.step = 0
 
         if delays is None:
@@ -99,15 +102,18 @@ class Shallows:
         for position, delay in zip(positions, delays):
             self.field.pressure.add_boundary(
                 self.field.get_point_region(
-                    position=(self.field.x.vector[len(self.field.x.vector) // 2] + position,
-                              max(self.field.y.vector))),
-                value=sg.gausspulse(self.field.t.vector - self.ping_pre_delay - delay,
-                                    self.ping_frequency, self.ping_bandwidth),
+                    position=(
+                        self.field.x.vector[len(self.field.x.vector) // 2]
+                        + position, max(self.field.y.vector))),
+                value=sg.gausspulse(
+                    self.field.t.vector - self.ping_pre_delay - delay,
+                    self.ping_frequency, self.ping_bandwidth),
                 additive=True)
             self.field.pressure.add_output(
                 self.field.get_point_region(
-                    position=(self.field.x.vector[len(self.field.x.vector) // 2] + position,
-                              max(self.field.y.vector))))
+                    position=(
+                        self.field.x.vector[len(self.field.x.vector) // 2]
+                        + position, max(self.field.y.vector))))
 
         if show:
             animator = fd.Animator2D(field=self.field, scale=0.1)
@@ -122,4 +128,5 @@ class Shallows:
             return self.postprocessor(
                 [output.mean_signal for output in self.field.pressure.outputs])
         else:
-            return [output.mean_signal for output in self.field.pressure.outputs]
+            return \
+                [output.mean_signal for output in self.field.pressure.outputs]
