@@ -70,3 +70,22 @@ The field is spatially quantized with an increment of 0.5 mm, so excitation posi
 adhere to this quantization.
 The return value of :code:`ping` is a tuple that contains the signal at the center of the
 high-density object and a list of echo signals recorded at the positions the pings where send at.
+
+2024 scenario
+-------------
+
+This scenario simulates echo ranging disturbed by a step on the floor of the simulation regime.
+The aim is to test different transducers apertures for robustness to the interfering signals reflected by the step.
+The transducer's aperture is defined indirectly by the size in two dimensions.
+Note that in this case the class :code:`Step` has to be used.
+The size of the step and the distance from the acoustic axis of the transducer can be set when crating the :code:`Step` object.
+The size of the transducer is specified with the :code:`ping` method, which returns the signal transmitted and received by the transducer, e.g.:
+
+.. code-block:: python
+
+    from sonar import Step
+
+    if __name__ == '__main__':
+
+        field = Step('2024', height=10, distance=10)
+        signal = field.ping(size=0.5, show=True)

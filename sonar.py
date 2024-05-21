@@ -130,3 +130,91 @@ class Shallows:
         else:
             return \
                 [output.mean_signal for output in self.field.pressure.outputs]
+
+
+class Step:
+
+    def __init__(self, scenario: str, height: float, distance: float):
+        """Create a scenario with a step on the seafloor.
+
+        Args:
+            scenario: Select a scenario.
+        """
+        if scenario == '2024':
+            water = fd.AcousticMaterial(1500, 1000, 1e-3, 3e-3)
+            self.field = fd.Acoustic2D(t_delta=1e-5, t_samples=4000,
+                                       x_delta=0.5e-1, x_samples=1600,
+                                       y_delta=0.5e-1, y_samples=400,
+                                       material=water)
+            self.ping_pre_delay = 1.25e-3
+            self.ping_frequency = 5e3
+            self.ping_bandwidth = 0.25
+
+            # Prevent field from wrapping around
+            self.field.pressure.add_boundary(
+                self.field.get_line_region(
+                    (0, 0, 0, self.field.y.vector[-1])
+                ))
+
+            # Add step with a small bevel
+            self.field.pressure.add_boundary(
+                self.field.get_line_region(
+                    (40 + distance, 0, 40 + distance, height - 0.1)
+                ))
+            self.field.pressure.add_boundary(
+                self.field.get_line_region(
+                    (40 + distance, height - 0.1, 40.1 + distance, height)
+                ))
+            self.field.pressure.add_boundary(
+                self.field.get_line_region(
+                    (40.1 + distance, height, self.field.x.vector[-1], height)
+                ))
+
+            self.field.x.snap_radius = 0.25e-1
+            self.field.y.snap_radius = 0.25e-1
+
+        else:
+            raise RuntimeError('Unknown scenario {}'.format(scenario))
+
+    def ping(self, size: float, show: bool = False):
+        """Send a ping with the given size of the transducer at the centre of
+        the field
+
+        Args:
+            size: Size of the transducer.
+            show: Animate the simulation.
+
+        Returns:
+            Returned signals.
+        """
+
+        # Reset field to allow for repeated execution.
+        self.field.pressure.values = np.zeros_like(self.field.pressure.values)
+        self.field.velocity_x.values = \
+            np.zeros_like(self.field.velocity_x.values)
+        self.field.velocity_y.values = \
+            np.zeros_like(self.field.velocity_y.values)
+        self.field.step = 0
+
+        ex_line = self.field.get_line_region(
+            (40 - size / 2, self.field.y.vector[-1],
+             40 + size / 2, self.field.y.vector[-1])
+        )
+        self.field.pressure.add_boundary(
+            ex_line,
+            value=sg.gausspulse(
+                self.field.t.vector - self.ping_pre_delay,
+                self.ping_frequency, self.ping_bandwidth),
+            additive=True)
+        self.field.pressure.add_output(ex_line)
+
+        if show:
+            animator = fd.Animator2D(field=self.field, scale=0.2)
+            animator.show_boundaries = True
+            animator.show_materials = False
+            animator.show_output = False
+            animator.start_simulation()
+        else:
+            self.field.simulate()
+
+        return self.field.pressure.outputs[0].signals[0]
